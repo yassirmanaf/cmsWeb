@@ -33,6 +33,12 @@ class Database:
         cursor.execute(("insert into article(titre, identifiant, auteur, date_publication, paragraphe)"
                         "values(?,?,?,?,?)"),(title, identifiant, author, publish_date, parag))
         connection.commit()
-
+    
+    def get_article(self,cherche):
+        
+        cursor = self.get_connection().cursor()
+        cursor.execute("select titre,date_publication from article WHERE titre LIKE ? OR paragraphe LIKE ?", ('%'+cherche+'%', '%'+cherche+'%',))
+        articles = cursor.fetchall()
+        return [titre[0] + ' - Article publie le: ' + titre[1] for titre in articles]
 
     
