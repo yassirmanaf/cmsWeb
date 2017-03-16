@@ -19,17 +19,9 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.disconnect()
-        
-@app.route('/accueil')
+@app.route('/')
 def Accueil():
     return render_template('Accueil.html')
-
-
-@app.route('/')
-def index():
-    titres = get_db().get_titres()
-
-    return render_template('index.html', titres=titres )
 
 @app.route('/admin')
 def admin():
@@ -60,13 +52,6 @@ def formulaire():
         get_db().insert_article(titre, identifiant, auteur, date, paragraphe)
         return redirect('/thanks')
 
-@app.route('/send', methods=['POST'])
-def donnees_recherchees():
-    x = request.form['name']
-    
-    articles = get_db().get_article(x)
-    print articles
-    return render_template('articles.html', articles=articles)
 
 
 
