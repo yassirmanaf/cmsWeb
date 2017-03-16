@@ -5,7 +5,21 @@
 <title>Page d'accueil</title>
 </head>
 <body>
-	<h1>Bonjour Omar t'es dans la page d'accueil<h1>
+	<h1>Bonjour Omar t'es dans la page d'accueil</h1>
+	<h2> Les cinqs dernieres publication jusqu'à date d'aujourdhui sont : </h2>
+	<ul>
+	{% set i = 1 %}
+	{% set espace = "---" %}
+    {% for article in articles %}
+    	{% if (loop.index > 5) : %}
+
+    		break
+    		
+    	{% else: %}	
+        	<li>{{ article.titre + espace + article.identifiant + espace + article.auteur + espace + article.date_publication + espace + article.paragraphe }}</li> 
+        {% endif %}
+    {% endfor %}
+  </ul>
 	<form action="/send" method="post">
 		<div>
 			<table>
