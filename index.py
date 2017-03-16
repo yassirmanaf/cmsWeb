@@ -71,7 +71,7 @@ def donnees_recherchees():
     x = request.form['name']
     articles = get_db().get_article(x)
     print articles
-    return render_template('article.html', article=articles)
+    return render_template('articles.html', article=articles)
 
 
 @app.route('/article/<identifiant>')
