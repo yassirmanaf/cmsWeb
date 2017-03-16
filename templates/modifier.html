@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modification d'Article</title>
+</head>
+<body>
+<h5>Modification d'Article</h5>
+{% if erreur %}
+    <p style="color:#700">{{ erreur }}</p>
+{% endif %}
+
+<form action="/update/{{article.identifiant}}" method="post">
+
+    titre : <input type="text" name="titre" size="40" value="{{ article.titre}}">
+    identifiant: <input type="text" name="idArticle" size="40" value="{{ article.identifiant }}" readonly="readonly">
+    auteur: <input type="text" name="auteur" size="40" value="{{ article.auteur }}" readonly="readonly">
+    date (YYYY-MM-DD):<input type="text" name="date" size="40" value="{{ article.date_publication }}" readonly="readonly">
+    paragraphe: <input type="text" name="paragraphe" size="400" value="{{ article.paragraphe }}">
+    <input type="submit"  value="modifier">
+
+</form>
+</body>
+</html>
