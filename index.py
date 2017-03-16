@@ -20,18 +20,12 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.disconnect()
-        
-@app.route('/')
-def Accueil():
-    return render_template('Accueil.html')
-
 
 
 @app.route('/')
 def index():
     articles = get_db().get_articles()
-
-    return render_template('index.html', articles=articles)
+    return render_template('Acceuil.html', articles=articles)
 
 
 @app.route('/admin')
@@ -65,33 +59,32 @@ def change(identifier):
     new_titre = request.form['titre']
     new_paragraphe = request.form['paragraphe']
     if '' in (new_titre, new_paragraphe):
-        return render_template('modifier.html', article=article, erreur='Tout les champs sont obligatoires')
-
+        return render_template('modifier.html', article=article,
+                               erreur='Tout les champs sont obligatoires')
     else:
-
         get_db().update(identifier, new_titre, new_paragraphe)
-    return redirect('/admin')
+        return redirect('/admin')
+
 
 @app.route('/send', methods=['POST'])
 def donnees_recherchees():
     x = request.form['name']
-    
     articles = get_db().get_article(x)
     print articles
-    return render_template('articles.html', articles=articles)
+    return render_template('article.html', article=articles)
+
 
 @app.route('/article/<identifiant>')
-
 def article_page(identifiant):
     article = get_db().get_article(identifiant)
     if article is None:
-        return render_template('erreur.html', erreur='Article Introuvable'), 404
+        return render_template('erreur.html',
+                               erreur='Article Introuvable'), 404
     else:
         return render_template('article.html', article=article)
 
 
 @app.route('/envoyer', methods=['POST'])
-
 def formulaire():
     titre = request.form['titre']
     identifiant = request.form['idArticle']
@@ -100,21 +93,29 @@ def formulaire():
     paragraphe = request.form['paragraphe']
 
     if '' in (titre, identifiant, auteur, date, paragraphe):
-        return render_template('nouveau-article.html', erreur='Tout les champs sont obligatoires')
+        return render_template('nouveau-article.html',
+                               erreur='Tout les champs sont obligatoires')
 
     if not get_db().is_unique_id(identifiant):
-        print "aana hna"
-        return render_template('nouveau-article.html', id_erreur='ID existe deja')
+        return render_template('nouveau-article.html',
+                               id_erreur='ID existe deja')
 
     if not get_db().valid_date(date):
-        return render_template('nouveau-article.html', date_erreur='FORMAT DATE INVALIDE')
+        return render_template('nouveau-article.html',
+                               date_erreur='FORMAT DATE INVALIDE')
 
     if not get_db().valid_id(identifiant):
-        return render_template('nouveau-article.html', id2_erreur='ID Non Valide')
+        return render_template('nouveau-article.html',
+                               id2_erreur='ID Non Valide')
 
     else:
         get_db().insert_article(titre, identifiant, auteur, date, paragraphe)
         return redirect('/admin')
+
+
+@app.route('/<other>')
+def page_404(other):
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
