@@ -21,7 +21,7 @@ def close_connection(exception):
     if db is not None:
         db.disconnect()
         
-@app.route('/accueil')
+@app.route('/')
 def Accueil():
     return render_template('Accueil.html')
 
