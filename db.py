@@ -63,6 +63,27 @@ class Database:
             return True
         else:
             return False
+        
+    def get_article_accueil(self,cherche):
+        
+        cursor = self.get_connection().cursor()
+        cursor.execute("select titre,date_publication from article WHERE titre LIKE ? OR paragraphe LIKE ?", ('%'+cherche+'%', '%'+cherche+'%',))
+        articles = cursor.fetchall()
+        return [titre[0] + ' - Article publie le: ' + titre[1] for titre in articles]
+    
+    def get_fiveArticle(self):
+        
+        cursor = self.get_connection().cursor()
+        cursor.execute("select * from article WHERE date_publication <= date() ")
+        articles = cursor.fetchall()
+        liste = []
+        
+        for titre in articles :
+            titres = Article(titre[1], titre[2], titre[3], titre[4], titre[5] )
+            liste.append(titres)
+        
+        liste.sort(key=lambda r: r.date_publication, reverse=True)
+        return liste
 
     def valid_date(self, datestring):
         try:

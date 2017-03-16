@@ -20,6 +20,12 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.disconnect()
+<<<<<<< HEAD
+@app.route('/')
+def Accueil():
+    return render_template('Accueil.html')
+
+=======
 
 
 @app.route('/')
@@ -28,6 +34,7 @@ def index():
     return render_template('Acceuil.html', articles=articles)
 
 
+>>>>>>> e83835279fa9194d91b78c991991b6507159cbea
 @app.route('/admin')
 def admin():
     articles = get_db().get_articles()
@@ -66,6 +73,8 @@ def change(identifier):
         return redirect('/admin')
 
 
+<<<<<<< HEAD
+=======
 @app.route('/send', methods=['POST'])
 def donnees_recherchees():
     x = request.form['name']
@@ -73,6 +82,7 @@ def donnees_recherchees():
     print articles
     return render_template('articles.html', article=articles)
 
+>>>>>>> e83835279fa9194d91b78c991991b6507159cbea
 
 @app.route('/article/<identifiant>')
 def article_page(identifiant):
