@@ -1,15 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
 <meta charset="utf-8">
-<title>Liste</title>
-</head>
-<body>
-  <h1>Articles</h1>
-  <ul>
-    {% for article in articles %}
-        <li>{{ article }}</li>
-    {% endfor %}
-  </ul>
-</body>
-</html>
+
+
+{% extends "navbar.html" %}
+{% block content %}
+<title>Recherche</title>
+<br><br><br><h3 style="color:#700">Resultat de: {% if mot %}
+    {{mot}}
+    {% endif %}</h3>
+<br><br><br>
+
+<div class="tableau">
+
+    <table class="table table-striped">
+        <thead>
+        <tr class="pg-primary bg-fluid">
+            <th class="alert-success">Titre</th>
+            <th class="alert-success">Date publication</th>
+
+        </tr>
+        </thead>
+
+        {% for article in articles %}
+        <tbody>
+        <tr class="bg-success">
+            <td>{{article.titre}}</td>
+            <td>{{article.date_publication}}</td>
+
+        <tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

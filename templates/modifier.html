@@ -1,24 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Modification d'Article</title>
-</head>
-<body>
-<h5>Modification d'Article</h5>
+{% extends "adminbar.html" %}
+{% block content %}
+<meta charset="UTF-8">
+<title>Modifier Article</title>
+
+
+<br><br><br><h3>Modification d'Article</h3>
+
+
 {% if erreur %}
-    <p style="color:#700">{{ erreur }}</p>
+<p style="color:#700">{{ erreur }}</p>
 {% endif %}
 
 <form action="/update/{{article.identifiant}}" method="post">
+    <div class="tableau">
 
-    titre : <input type="text" name="titre" size="40" value="{{ article.titre}}">
-    identifiant: <input type="text" name="idArticle" size="40" value="{{ article.identifiant }}" readonly="readonly">
-    auteur: <input type="text" name="auteur" size="40" value="{{ article.auteur }}" readonly="readonly">
-    date (YYYY-MM-DD):<input type="text" name="date" size="40" value="{{ article.date_publication }}" readonly="readonly">
-    paragraphe: <input type="text" name="paragraphe" size="400" value="{{ article.paragraphe }}">
-    <input type="submit"  value="modifier">
+        <table class="table table-striped">
+            <thead>
+            <tr class="pg-primary bg-fluid">
+            </tr>
+            </thead>
 
+            <tbody>
+            <tr class="bg-success">
+                <td>titre</td>
+                <td><input type="text" name="titre" size="40" value="{{ article.titre }}"></td>
+
+            </tr>
+
+            <tr class="bg-success">
+                <td>identifiant</td>
+                <td><input type="text" name="idArticle" size="40" value="{{ article.identifiant }}" readonly="readonly">
+                </td>
+            </tr>
+
+            <tr class="bg-success">
+                <td>auteur</td>
+                <td><input type="text" name="auteur" size="40" value="{{ article.auteur}}" readonly="readonly"></td>
+            </tr>
+
+            <tr class="bg-success">
+                <td>date:</td>
+                <td><input type="date" name="date" size="40" value="{{ article.date_publication }}" readonly="readonly">
+                </td>
+            </tr>
+
+            <tr class="bg-success">
+                <td>paragraphe:</td>
+                <td><textarea rows="4" cols="50" name="paragraphe" size="40">{{ article.paragraphe}}</textarea></td>
+            </tr>
+
+            <tr class="bg-success">
+
+                <td><input type="submit" value="Modifier"></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
 </form>
-</body>
-</html>
+
+{% endblock %}

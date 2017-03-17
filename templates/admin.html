@@ -1,19 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ADMIN PAGE</title>
-</head>
-<body>
-<h5>This is admin Page!</h5>
-<h3> <a href="/admin-nouveau"> Nouveau Article </a> </h3>
- <ul>
-    {% for article in articles %}
-        <li>Titre: {{ article.titre }}</li>
-        <li> Date Publication: {{article.date_publication}}</li>
-        <form action="/modifier/{{article.identifiant}}"><input type="submit" value="Modifier"/></form>
-     ----------------------------------------------------
-    {% endfor %}
-  </ul>
-</body>
-</html>
+{% extends "adminbar.html" %}
+{% block content %}
+<title>ADMIN PAGE</title>
+<br><br><br>
+
+<div class="tableau">
+
+    <table class="table table-striped">
+        <thead>
+        <tr class="pg-primary bg-fluid">
+            <th class="alert-success">Titre</th>
+            <th class="alert-success">Date publication</th>
+            <th class="alert-success">Modification</th>
+        </tr>
+        </thead>
+
+        {% for article in articles %}
+        <tbody>
+        <tr class="bg-success">
+            <td>{{article.titre}}</td>
+            <td>{{article.date_publication}}</td>
+            <td>
+                <form action="/modifier/{{article.identifiant}}"><input type="submit" value="Modifier"/></form>
+            </td>
+        <tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}
