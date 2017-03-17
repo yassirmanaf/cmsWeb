@@ -1,37 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Page d'accueil</title>
-</head>
-<body>
-	<h1>Bonjour Omar t'es dans la page d'accueil</h1>
-	<h2> Les cinqs dernieres publication jusqu'à date d'aujourdhui sont : </h2>
-	<ul>
-	{% set i = 1 %}
-	{% set espace = "---" %}
-    {% for article in articles %}
-    	{% if (loop.index > 5) : %}
+{% extends "navbar.html" %}
+{% block content %}
 
-    		break
-    		
-    	{% else: %}	
-        	<li>{{ article.titre + espace + article.identifiant + espace + article.auteur + espace + article.date_publication + espace + article.paragraphe }}</li> 
-        {% endif %}
-    {% endfor %}
-  </ul>
-	<form action="/send" method="post">
-		<div>
-			<table>
-				<tr>
-					<td><label for="nom">champs à chercher :</label>
-					</td>
-					<td><input type="text" id="nom" name="name" size="40">
-					</td>
-				</tr>	
-			</table>
-			<input type="submit" value="Envoyer">	
-		</div>
-	</form>
-</body>
-</html>
+<meta charset="utf-8">
+<br><br><br><br>
+
+<h1>Bonjour ! Vous etes dans la page d'accueil</h1><br>
+<form action="/send" method="post">
+    <div>
+        <table>
+            <tr>
+                <td><label for="nom">champs à chercher :</label>
+                </td>
+                <td><input type="text" id="nom" name="name" size="40"></td>
+                <td>&nbsp;<input type="submit" value="Envoyer"></td>
+
+            </tr>
+        </table>
+
+    </div>
+</form>
+<br><h2> Les cinqs dernieres publications sont: </h2>
+<title>Tableau de Bord</title>
+<br><br><br>
+
+
+<div class="tableau">
+
+    <table class="table table-striped">
+        <thead>
+        <tr class="pg-primary bg-fluid">
+            <th class="alert-success">Titre</th>
+            <th class="alert-success">Identifiant</th>
+            <th class="alert-success">Auteur</th>
+            <th class="alert-success">Date de publication</th>
+            <th class="alert-success">Paragraphe</th>
+
+        </tr>
+        </thead>
+
+        {% for article in articles %}
+        <tbody>
+        <tr class="bg-success">
+            <td><a href="/article/{{article.identifiant}}">{{article.titre}}</a></td>
+            <td>{{article.identifiant}}</td>
+            <td>{{article.auteur}}</td>
+            <td>{{article.date_publication}}</td>
+            <td class="parag"><p>{{article.paragraphe}}</p></td>
+        <tr>
+        </tbody>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

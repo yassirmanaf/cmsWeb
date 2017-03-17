@@ -1,5 +1,6 @@
 import sqlite3
 import re
+from ObjetArticle import Article
 
 
 def build_artist_dictionary(row):
@@ -14,20 +15,8 @@ class Database:
 
     def get_connection(self):
         if self.connection is None:
-            self.connection = sqlite3.connect('cms.bd')
+            self.connection = sqlite3.connect('DB/cms.bd')
         return self.connection
-
-    def get_titres(self):
-        cursor = self.get_connection().cursor()
-        titres = cursor.execute("select titre from article").fetchall()
-        identifiant = cursor.execute("select identifiant "
-                                     "from article").fetchall()
-        auteur = cursor.execute("select auteur "
-                                "from article").fetchall()
-        date = cursor.execute("select date_publication "
-                              "from article").fetchall()
-        parag = cursor.execute("select paragraphe from article").fetchall()
-        return [titre[0] for titre in titres]
 
     def disconnect(self):
         if self.connection is not None:
@@ -63,27 +52,38 @@ class Database:
             return True
         else:
             return False
-        
-    def get_article_accueil(self,cherche):
-        
+
+    def get_article_accueil(self, cherche):
         cursor = self.get_connection().cursor()
-        cursor.execute("select titre,date_publication from article WHERE titre LIKE ? OR paragraphe LIKE ?", ('%'+cherche+'%', '%'+cherche+'%',))
-        articles = cursor.fetchall()
-        return [titre[0] + ' - Article publie le: ' + titre[1] for titre in articles]
-    
-    def get_fiveArticle(self):
-        
-        cursor = self.get_connection().cursor()
-        cursor.execute("select * from article WHERE date_publication <= date() ")
+        cursor.execute("select * from article "
+                       "WHERE titre LIKE ? OR paragraphe LIKE ?",
+                       ('%'+cherche+'%', '%'+cherche+'%',))
         articles = cursor.fetchall()
         liste = []
-        
-        for titre in articles :
-            titres = Article(titre[1], titre[2], titre[3], titre[4], titre[5] )
+
+        for titre in articles:
+            titres = Article(titre[1], titre[2], titre[3], titre[4], titre[5])
             liste.append(titres)
-        
-        liste.sort(key=lambda r: r.date_publication, reverse=True)
+
         return liste
+
+    def get_fiveArticle(self):
+        cursor = self.get_connection().cursor()
+        cursor.execute("select * from article "
+                       "WHERE date_publication <= date() ")
+        articles = cursor.fetchall()
+        liste = []
+        list = []
+        i = 0
+        for titre in articles:
+            titres = Article(titre[1], titre[2], titre[3], titre[4], titre[5])
+            liste.append(titres)
+        liste.sort(key=lambda r: r.date_publication, reverse=True)
+        for object in liste:
+            if i < 5:
+                list.append(object)
+                i = i + 1
+        return list
 
     def valid_date(self, datestring):
         try:
@@ -121,3 +121,4 @@ class Database:
             "select titre, identifiant, auteur, date_publication, "
             "paragraphe from article").fetchall()
         return [build_artist_dictionary(each) for each in articles]
+

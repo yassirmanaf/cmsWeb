@@ -20,21 +20,14 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.disconnect()
-<<<<<<< HEAD
-@app.route('/')
-def Accueil():
-    return render_template('Accueil.html')
-
-=======
 
 
 @app.route('/')
 def index():
-    articles = get_db().get_articles()
-    return render_template('Acceuil.html', articles=articles)
+    articles = get_db().get_fiveArticle()
+    return render_template('Accueil.html', articles=articles)
 
 
->>>>>>> e83835279fa9194d91b78c991991b6507159cbea
 @app.route('/admin')
 def admin():
     articles = get_db().get_articles()
@@ -73,16 +66,13 @@ def change(identifier):
         return redirect('/admin')
 
 
-<<<<<<< HEAD
-=======
 @app.route('/send', methods=['POST'])
 def donnees_recherchees():
-    x = request.form['name']
-    articles = get_db().get_article(x)
-    print articles
-    return render_template('article.html', article=articles)
+    mot_recherche = request.form['name']
+    articles = get_db().get_article_accueil(mot_recherche)
+    return render_template('articles.html',
+                           articles=articles, mot=mot_recherche)
 
->>>>>>> e83835279fa9194d91b78c991991b6507159cbea
 
 @app.route('/article/<identifiant>')
 def article_page(identifiant):
@@ -101,7 +91,6 @@ def formulaire():
     auteur = request.form['auteur']
     date = request.form['date']
     paragraphe = request.form['paragraphe']
-
     if '' in (titre, identifiant, auteur, date, paragraphe):
         return render_template('nouveau-article.html',
                                erreur='Tout les champs sont obligatoires')

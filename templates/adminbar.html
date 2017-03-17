@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+</head>
+<body>
+
+<nav id="navBar">
+    <ul>
+        <li>
+            <a href="/">Accueil</a>
+
+        </li>
+        <li>
+            <a href="/admin">Admin</a>
+
+    </ul>
+    </li>
+    <ul>
+        <li>
+            <a href="/admin-nouveau">Nouveau Article</a>
+
+        </li>
+    </ul>
+</nav>
+
+{% block content %} {% endblock %}
+</body>
+</html>

@@ -1,0 +1,64 @@
+body {
+    font: 300 15px/1.5 "Helvetica Neue", helvetica, arial, sans-serif;
+    margin: 15px;
+    padding-left: 250px;
+    background-color: #e8e3e3 !important;
+}
+
+#navBar ul {
+    float: left;
+    -webkit-transition: .5s;
+    transition: .5s;
+    background-color: #e8e3e3 !important;
+
+}
+
+#navBar li {
+    float: left;
+    position: relative;
+    width: 150px;
+    list-style: none;
+    -webkit-transition: .5s;
+    transition: .5s;
+    margin: 3px;
+}
+
+#navBar > ul > li > a, div {
+    text-transform: uppercase;
+}
+
+#navBar a {
+    display: block;
+    text-decoration: none;
+    padding: 5px 15px;
+    color: #000;
+}
+
+* {
+    margin: 0;
+}
+
+#navBar li:hover {
+    background: #dff0d8;
+}
+
+.inline {
+    width: 320px;
+}
+
+.inline li {
+    display: inline-block;
+}
+
+.tableau {
+    margin-right: 250px;
+    margin-top: 30px;
+
+}
+
+p {
+    width:40em;
+    word-wrap: break-word;
+
+}
+
