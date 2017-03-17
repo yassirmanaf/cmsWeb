@@ -17,7 +17,7 @@
         {% for article in articles %}
         <tbody>
         <tr class="bg-success">
-            <td>{{article.titre}}</td>
+            <td><a href="/article/{{article.identifiant}}">{{article.titre}}</a></td>
             <td>{{article.date_publication}}</td>
             <td>
                 <form action="/modifier/{{article.identifiant}}"><input type="submit" value="Modifier"/></form>
