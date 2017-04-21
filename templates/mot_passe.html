@@ -1,0 +1,17 @@
+{% extends "navbar.html" %}
+{% block content %}
+  	<br><br><h1>reinitialisation du mot de passe</h1>
+
+	{% if resultat %}
+		<p style="color: red">{{resultat}}</p>
+	{% endif %}
+  	<form action="/email_forgotten" method="post">
+    	<br>
+    	<label for="champ_email">Courriel</label>&nbsp;<input type="text" id="champ_email" name="email" maxlength="100"  >
+    	<br>
+    	<input type="submit" value="Soumettre" align="center">
+  	</form>
+  
+  
+  
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "navbar.html" %}
+{% block content %}
+ <title>Initialisation</title>
+
+
+<body >
+  
+<br>
+      	<div style="margin-top: 200px ">
+      		{% if email %}
+           <form action="/set_password/{{email}}" method="post" >
+           	{% endif %}
+             <table style="border-style: groove">
+             <caption style="font-size: 20px">Réinitialisation du mot de passe </caption>
+            <tr>    	
+                <td style="padding: 20px"><label for="password">mot de passe :</label><br>
+                <td style="padding-left: 20px;padding-right: 20px"><input type="password" id="password" name="password" size="40">
+            </tr>
+           	
+            <tr>
+             	<td>
+                <td style="padding: 20px">&nbsp;<input type="submit" value="Confirmer" >
+
+            </tr>
+        </table>
+             
+ 		
+           </form>
+     
+    
+    	</div>
+    
+
+{% endblock %}

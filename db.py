@@ -1,7 +1,9 @@
 import sqlite3
 import re
 from ObjetArticle import Article
-
+from reponse import Reponse
+import hashlib
+import uuid
 
 def build_artist_dictionary(row):
     return {"titre": row[0], "identifiant": row[1], "auteur": row[2],
@@ -9,10 +11,13 @@ def build_artist_dictionary(row):
 
 
 class Database:
-
+    
+    
+    
     def __init__(self):
         self.connection = None
-
+        
+        
     def get_connection(self):
         if self.connection is None:
             self.connection = sqlite3.connect('DB/cms.bd')
@@ -21,6 +26,25 @@ class Database:
     def disconnect(self):
         if self.connection is not None:
             self.connection.close()
+    
+     
+    def verifier(self, username, password):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        cursor.execute(("select salt, hash from users where utilisateur=?"),
+               (username,))
+        user = cursor.fetchone()
+        if user is None:
+            reponse = "introuvable"
+        else:
+            salt = user[0]
+            hashed_password = hashlib.sha512(password + salt).hexdigest()
+            if hashed_password == user[1]:
+                reponse = "autorise"
+            else:
+                reponse = "mpincorrect"
+        reponseObject = Reponse(reponse)       
+        return reponseObject
 
     def insert_article(self, title, identifiant, author, publish_date, parag):
 
@@ -122,3 +146,94 @@ class Database:
             "paragraphe from article").fetchall()
         return [build_artist_dictionary(each) for each in articles]
 
+    def save_session(self, id_session, username):
+        connection = self.get_connection()
+        connection.execute(("insert into sessions(id_session, utilisateur) "
+                            "values(?, ?)"), (id_session, username))
+        connection.commit()
+
+    def delete_session(self, id_session):
+        connection = self.get_connection()
+        connection.execute(("delete from sessions where id_session=?"),
+                           (id_session,))
+        connection.commit()
+
+    def get_session(self, id_session):
+        cursor = self.get_connection().cursor()
+        cursor.execute(("select utilisateur from sessions where id_session=?"),
+                       (id_session,))
+        data = cursor.fetchone()
+        if data is None:
+            return None
+        else:
+            return data[0]
+      
+    def check_token(self, token):
+        cursor = self.get_connection().cursor()
+        cursor.execute(("select token from tokens where token=?"),
+                       (token,))
+        data = cursor.fetchone()
+        
+        if data is None:
+            return False
+        else:
+            return data[0]
+    
+    
+    def delete_token(self, token):
+        connection = self.get_connection()
+        connection.execute(("DELETE FROM tokens WHERE token=?"),
+                       (token,))
+        connection.commit()
+        
+    def create_token(self,token, email):    
+        connection = self.get_connection()
+        
+        connection.execute(("insert into tokens(token, email) "
+                            "values(?, ?)"), (token, email))
+        connection.commit()
+            
+    def create_user(self, username, email, salt, hashed_password):
+        connection = self.get_connection()
+        connection.execute(("insert into users(utilisateur, email, salt, hash)"
+                            " values(?, ?, ?, ?)"), ( username, email, salt, hashed_password))
+        connection.commit()
+
+    def get_user_login_info(self, username):
+        cursor = self.get_connection().cursor()
+        cursor.execute(("select utilisateur from users where utilisateur=?"),
+                       (username,))
+        user = cursor.fetchone()
+        if user is None:
+            return None
+        else:
+            return True
+        
+    def get_email(self,token):
+        cursor = self.get_connection().cursor()
+        cursor.execute(("select email from tokens where token=?"),
+                       (token,))
+        email = cursor.fetchone()
+        if email is None:
+            return None
+        else:
+            return email
+     
+        
+    def get_user_login_email(self, email):
+        cursor = self.get_connection().cursor()
+        cursor.execute(("select email from users where email=?"),
+                       (email,))
+        user = cursor.fetchone()
+        if user is None:
+            return None
+        else:
+            return True   
+    def set_passw(self, salt, hashed_password,email):     
+        
+            connection = self.get_connection()
+            
+            connection.execute("""UPDATE users SET salt = ? ,hash = ? WHERE email= ? """,
+                           (salt, hashed_password, email))
+            connection.commit()
+    

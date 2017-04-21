@@ -2,7 +2,14 @@
 {% block content %}
 <title>ADMIN PAGE</title>
 <br><br><br>
-
+	{% if username %}
+	<br>
+    <p>Vous êtes connecté en tant que : {{ username }}.</p>
+    <br><br>
+    <p><a href="/formulaire">Cliquez ici pour créer un compte</a></p>
+    
+    <p><a href="/logout">Se déconnecter</a></p>
+ 	 
 <div class="tableau">
 
     <table class="table table-striped">
@@ -28,5 +35,10 @@
     </table>
 
 </div>
-
-{% endblock %}
+		
+	{% else %}
+		<br>
+    	<p>Vous n'êtes pas connecté.</p>
+    	<a href="/admin">cliquer ici pour se connecter</a>
+ 	{% endif %}
+	{% endblock %}

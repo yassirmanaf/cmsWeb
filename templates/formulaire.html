@@ -1,0 +1,13 @@
+{% extends "navbar.html" %}
+{% block content %}
+  <h1>Création d'un compte</h1>
+  {% if error %}
+    <p style="color:#F00">Tous les champs sont obligatoires. Veuillez recommencer.</p>
+  {% endif %}
+  <form action="/formulaire" method="POST">
+    <br>
+    <label for="champ_email">Courriel</label>&nbsp;<input type="text" id="champ_email" name="email" maxlength="100">
+    <br>
+    <input type="submit" value="Soumettre">
+  </form>
+{% endblock %}

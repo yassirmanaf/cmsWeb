@@ -1,0 +1,52 @@
+{% extends "navbar.html" %}
+{% block content %}
+ <title>Authentification</title>
+
+
+<body onload="validate()">
+  
+<br>
+      	<div style="margin-top: 200px ">
+           <form action="/login_email" method="post" >
+           	<p id="demo" style="color:red"></p>
+             <table style="border-style: groove">
+             <caption style="font-size: 20px">création du compte </caption>
+            <tr >
+                <td style="padding: 20px"><label for="nom">utilisateur :</label><br>
+                <td style="padding: 20px"><input type="text" id="nom" name="utilisateur" size="40"><br>
+            </tr>
+            <tr>    	
+                <td style="padding: 20px"><label for="password">mot de passe :</label><br>
+                <td style="padding-left: 20px;padding-right: 20px"><input type="password" id="password" name="password" size="40">
+            </tr>
+            <tr>
+            	<td style="padding: 20px"><label for="champ_email">Courriel:</label><br>
+            	<td style="padding: 20px">&nbsp;<input type="text" id="champ_email" name="email" maxlength="100">
+            </tr>	
+            <tr>
+             	<td>
+                <td style="padding: 20px">&nbsp;<input type="submit" value="CRÉER" >
+
+            </tr>
+        </table>
+             
+ 		
+           </form>
+     
+    
+    	</div>
+    	{% block javascript %}
+		<script type="text/javascript">
+		function validate()
+		{
+    		 {% if resultat == "utilisateur existe deja ! " %}
+    		 	{document.getElementById('demo').innerHTML = 'utilisateur existe deja !';}
+    		 {% elif resultat == "tous les champs sont obligatoires" %}	 
+   				{document.getElementById('demo').innerHTML = 'tous les champs sont obligatoires';}
+   			 {% endif %}
+    		
+		}
+		</script>
+		{% endblock %}
+
+{% endblock %}
