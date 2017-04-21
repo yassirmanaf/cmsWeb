@@ -1,0 +1,50 @@
+{% extends "navbar.html" %}
+{% block content %}
+ <title>Authentification</title>
+
+
+<body onload="validate()">
+  
+<br>
+      	<div style="margin-top: 200px ">
+           <form action="/login" method="post" >
+           	<p id="demo" style="color:red"></p>
+             <table style="border-style: groove">
+             <caption style="font-size: 20px">Authentification</caption>
+            <tr >
+                <td style="padding: 20px"><label for="nom">utilisateur :</label><br>
+                <td style="padding: 20px"><input type="text" id="nom" name="utilisateur" size="40"><br>
+            </tr>
+            <tr>    	
+                <td style="padding: 20px"><label for="password">mot de passe :</label><br>
+                <td style="padding-left: 20px;padding-right: 20px"><input type="password" id="password" name="password" size="40">
+            </tr>
+            <tr>
+             	<td>
+                <td style="padding: 20px">&nbsp;<input type="submit" value="Login" ><br>
+                <p><a href="/mot_passe_oublie">mot de passe oublié</a></p>
+
+            </tr>
+        </table>
+             
+ 		
+           </form>
+     
+    
+    	</div>
+    	{% block javascript %}
+		<script type="text/javascript">
+		function validate()
+		{
+    		 {% if resultat == 'mpincorrect' or resultat == 'introuvable' or resultat == "tous les champs sont obligatoires" %}
+
+   				 {document.getElementById('demo').innerHTML = 'information incorrecte';}
+
+   			 {% endif %}
+    		
+    		
+		}
+		</script>
+		{% endblock %}
+
+{% endblock %}

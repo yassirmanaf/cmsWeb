@@ -13,3 +13,4 @@ class Article:
         self.auteur = auteur
         self.date_publication = date_publication
         self.paragraphe = paragraphe 
+
