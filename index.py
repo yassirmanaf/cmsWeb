@@ -97,7 +97,7 @@ def formulaire_creation():
             token = uuid.uuid4().hex
             get_db().create_token(token, email)
             url = ("http://localhost:5000/confirm/%s" % token)
-            source_address = "omar.djani@gmail.com"
+            source_address = "votre email"
             destination_address = email
             body = (" veuillez cliquer sur le lien pour "
                     "confirmer votre compte %s " % url)
@@ -109,7 +109,7 @@ def formulaire_creation():
             msg.attach(MIMEText(body, 'plain'))
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            server.login(source_address, "consultation88")
+            server.login(source_address, "votre mot de passe")
             text = msg.as_string()
             server.sendmail(source_address, destination_address, text)
             server.quit()
@@ -338,7 +338,7 @@ def forget_email():
         token = uuid.uuid4().hex
         get_db().create_token(token, email)
         url = ("http://localhost:5000/initialisation/%s" % token)
-        source_address = "omar.djani@gmail.com"
+        source_address = "Votre email"
         destination_address = email
         body = (" veuillez cliquer sur le lien "
                 "pour confirmer votre compte %s " % url)
@@ -350,7 +350,7 @@ def forget_email():
         msg.attach(MIMEText(body, 'plain'))
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login(source_address, "consultation88")
+        server.login(source_address, "votre mot de passe")
         text = msg.as_string()
         server.sendmail(source_address, destination_address, text)
         server.quit()
