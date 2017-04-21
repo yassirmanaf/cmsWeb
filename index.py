@@ -18,7 +18,6 @@ from email.MIMEText import MIMEText
 from itsdangerous import URLSafeTimedSerializer
 
 
-
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 
@@ -42,23 +41,28 @@ def index():
     return render_template('Accueil.html', articles=articles)
 
 app.secret_key = "(*&*&322387heqe738220)(*(*22347657"
+
+
 @app.route('/administration')
 def start_page():
     articles = get_db().get_articles()
     username = None
     if "id" in session:
         username = get_db().get_session(session["id"])
-    return render_template('admin.html', username=username, articles = articles)
+    return render_template('admin.html', username=username,
+                           articles=articles)
+
 
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['utilisateur']
     password = request.form['password']
     if username == "" or password == "":
-        return render_template('authentifier.html', resultat = "tous les champs sont obligatoires")
+        return render_template('authentifier.html',
+                               resultat="tous les champs sont obligatoires")
     reponse = get_db().verifier(username, password)
 
-    if reponse.reponse == "autorise" :
+    if reponse.reponse == "autorise":
         id_session = uuid.uuid4().hex
 
         get_db().save_session(id_session, username)
@@ -66,11 +70,14 @@ def login():
 
         return redirect('/administration')
     elif reponse.reponse == "mpincorrect":
-        return render_template('authentifier.html', resultat = "mpincorrect")
-    else :
-        return render_template('authentifier.html', resultat = "introuvable")
-@app.route('/confirmation')
+        return render_template('authentifier.html',
+                               resultat="mpincorrect")
+    else:
+        return render_template('authentifier.html',
+                               resultat="introuvable")
 
+
+@app.route('/confirmation')
 def confirmation_page():
     return render_template('confirmer.html')
 
@@ -84,17 +91,17 @@ def formulaire_creation():
 
         if email == "":
             return render_template("formulaire.html",
-                                   error="Tous les champs sont obligatoires.")
+                                   error="Tous les champs "
+                                         "sont obligatoires.")
         else:
             token = uuid.uuid4().hex
             get_db().create_token(token, email)
-            url = ("http://localhost:5000/confirm/%s"%token)
+            url = ("http://localhost:5000/confirm/%s" % token)
             source_address = "omar.djani@gmail.com"
             destination_address = email
-            body = (" veuillez cliquer sur le lien pour confirmer votre compte %s " %url)
+            body = (" veuillez cliquer sur le lien pour "
+                    "confirmer votre compte %s " % url)
             subject = "création du compte"
-
-
             msg = MIMEMultipart()
             msg['Subject'] = subject
             msg['From'] = source_address
@@ -108,6 +115,7 @@ def formulaire_creation():
             server.quit()
             return redirect("/confirmation")
 
+
 def authentication_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -115,6 +123,7 @@ def authentication_required(f):
             return send_unauthorized()
         return f(*args, **kwargs)
     return decorated
+
 
 @app.route('/logout')
 @authentication_required
@@ -125,6 +134,7 @@ def logout():
         get_db().delete_session(id_session)
     return redirect("/")
 
+
 def is_authenticated(session):
     return "id" in session
 
@@ -134,20 +144,21 @@ def send_unauthorized():
                     'You have to login with proper credentials', 401,
                     {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
+
 @authentication_required
 @app.route('/admin-nouveau')
 def newPost():
     if "id" in session:
         return render_template('nouveau-article.html')
     else:
-        return render_template('authentifier.html'),401
+        return render_template('authentifier.html'), 401
 
 
 @authentication_required
 @app.route('/admin')
 def loginAdmin():
     if "id" in session:
-        return redirect ('/administration')
+        return redirect('/administration')
     else:
         return render_template('authentifier.html')
 
@@ -166,7 +177,8 @@ def modifier(identifiant):
         else:
             return render_template('modifier.html', article=article)
     else:
-        return "",401
+        return "", 401
+
 
 @app.route('/update/<identifier>', methods=['POST'])
 def change(identifier):
@@ -226,15 +238,17 @@ def formulaire():
         get_db().insert_article(titre, identifiant, auteur, date, paragraphe)
         return redirect('/admin')
 
+
 @app.route('/confirm/<token>')
 def confirm_email(token):
     check_token = get_db().check_token(token)
 
-    if check_token == False:
-        return redirect ('/erreur'),401
+    if not check_token:
+        return redirect('/erreur'), 401
     else:
         get_db().delete_token(token)
         return render_template('registration.html')
+
 
 @app.route('/identifiant/<iden>', methods=['POST'])
 def identifiant(iden):
@@ -296,7 +310,9 @@ def registr():
     password = request.form['password']
     email = request.form['email']
     if username == "" or password == "" or email == "":
-        return render_template('registration.html', resultat = "tous les champs sont obligatoires"),403
+        return render_template('registration.html',
+                               resultat="tous les champs sont "
+                                        "obligatoires"), 403
     reponse = get_db().get_user_login_info(username)
     if reponse is None:
         salt = uuid.uuid4().hex
@@ -304,11 +320,15 @@ def registr():
         get_db().create_user(username, email, salt, hashed_password)
         return render_template('confirmer.html')
     else:
-        return render_template('registration.html', resultat = "utilisateur existe deja ! "),403
+        return render_template('registration.html',
+                               resultat="utilisateur "
+                                        "existe deja ! "), 403
+
 
 @app.route('/mot_passe_oublie')
 def password():
     return render_template('mot_passe.html')
+
 
 @app.route('/email_forgotten', methods=['POST'])
 def forget_email():
@@ -317,10 +337,11 @@ def forget_email():
     if reponse is True:
         token = uuid.uuid4().hex
         get_db().create_token(token, email)
-        url = ("http://localhost:5000/initialisation/%s"%token)
+        url = ("http://localhost:5000/initialisation/%s" % token)
         source_address = "omar.djani@gmail.com"
         destination_address = email
-        body = (" veuillez cliquer sur le lien pour confirmer votre compte %s " %url)
+        body = (" veuillez cliquer sur le lien "
+                "pour confirmer votre compte %s " % url)
         subject = "récupération de mot de passe"
         msg = MIMEMultipart()
         msg['Subject'] = subject
@@ -335,32 +356,33 @@ def forget_email():
         server.quit()
         return redirect("/confirmation")
     else:
-        resultat='email inexistant !'
-        return render_template('mot_passe.html', resultat = resultat),401
+        resultat = 'email inexistant !'
+        return render_template('mot_passe.html', resultat=resultat), 401
+
 
 @app.route('/initialisation/<token>')
 def confirm_mp(token):
     check_token = get_db().check_token(token)
 
-    if check_token == False:
-        return redirect ('/erreur')
+    if not check_token:
+        return redirect('/erreur')
     else:
         email = get_db().get_email(token)
         get_db().delete_token(token)
-        return render_template('initialisation.html', email = email)
-
+        return render_template('initialisation.html', email=email)
 
 
 @app.route('/set_password/<email>', methods=['POST'])
 def set_password(email):
-        email= email[3:]
-        email=email[:-3]
+        email = email[3:]
+        email = email[:-3]
         print email
         passw = request.form['password']
         salt = uuid.uuid4().hex
         hashed_password = hashlib.sha512(passw + salt).hexdigest()
         get_db().set_passw(salt, hashed_password, email)
         return render_template('confirmer.html')
+
 
 @app.route('/<other>')
 def page_404(other):

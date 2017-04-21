@@ -5,6 +5,7 @@ from reponse import Reponse
 import hashlib
 import uuid
 
+
 def build_artist_dictionary(row):
     return {"titre": row[0], "identifiant": row[1], "auteur": row[2],
             "date_publication": row[3], "paragraphe": row[4]}
@@ -23,12 +24,11 @@ class Database:
         if self.connection is not None:
             self.connection.close()
 
-
     def verifier(self, username, password):
         connection = self.get_connection()
         cursor = connection.cursor()
         cursor.execute(("select salt, hash from users where utilisateur=?"),
-               (username,))
+                       (username,))
         user = cursor.fetchone()
         if user is None:
             reponse = "introuvable"
@@ -175,14 +175,13 @@ class Database:
         else:
             return data[0]
 
-
     def delete_token(self, token):
         connection = self.get_connection()
         connection.execute(("DELETE FROM tokens WHERE token=?"),
-                       (token,))
+                           (token,))
         connection.commit()
 
-    def create_token(self,token, email):
+    def create_token(self, token, email):
         connection = self.get_connection()
 
         connection.execute(("insert into tokens(token, email) "
@@ -192,7 +191,8 @@ class Database:
     def create_user(self, username, email, salt, hashed_password):
         connection = self.get_connection()
         connection.execute(("insert into users(utilisateur, email, salt, hash)"
-                            " values(?, ?, ?, ?)"), ( username, email, salt, hashed_password))
+                            " values(?, ?, ?, ?)"),
+                           (username, email, salt, hashed_password))
         connection.commit()
 
     def get_user_login_info(self, username):
@@ -205,7 +205,7 @@ class Database:
         else:
             return True
 
-    def get_email(self,token):
+    def get_email(self, token):
         cursor = self.get_connection().cursor()
         cursor.execute(("select email from tokens where token=?"),
                        (token,))
@@ -214,7 +214,6 @@ class Database:
             return None
         else:
             return email
-
 
     def get_user_login_email(self, email):
         cursor = self.get_connection().cursor()
@@ -225,12 +224,13 @@ class Database:
             return None
         else:
             return True
-    def set_passw(self, salt, hashed_password,email):
+
+    def set_passw(self, salt, hashed_password, email):
 
             connection = self.get_connection()
-
-            connection.execute("""UPDATE users SET salt = ? ,hash = ? WHERE email= ? """,
-                           (salt, hashed_password, email))
+            connection.execute("""UPDATE users SET salt = ? ,hash = ?
+                                WHERE email= ? """,
+                               (salt, hashed_password, email))
             connection.commit()
 
     def get_articles_json(self):
