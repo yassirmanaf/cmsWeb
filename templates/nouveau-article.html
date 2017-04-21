@@ -2,7 +2,6 @@
 {% block content %}
 <meta charset="UTF-8">
 <title>New Article</title>
-
 <br><br><br><h3>Nouveau Article</h3>
 {% if erreur %}
 <p style="color:#700">{{ erreur }}</p>
@@ -29,13 +28,17 @@
             <tbody>
             <tr class="bg-success">
                 <td>titre</td>
-                <td><input type="text" name="titre" size="40" value="{{ request.form['titre'] }}"></td>
+                <td><input type="text" name="titre" id="titre" size="40" value="{{ request.form['titre'] }}"
+                           onchange="onTitreChange();"></td>
 
             </tr>
 
             <tr class="bg-success">
                 <td>identifiant</td>
-                <td><input type="text" name="idArticle" size="40" value="{{ request.form['idArticle'] }}"></td>
+                <td><input type="text" name="idArticle" id="idArticle" size="40" value="{{ request.form['idArticle'] }}"
+                           onchange="onIdChange();"></td>
+                <p id="p_error" hidden></p>
+
             </tr>
 
             <tr class="bg-success">
@@ -50,7 +53,8 @@
 
             <tr class="bg-success">
                 <td>paragraphe:</td>
-                <td><textarea rows="4" cols="50" name="paragraphe" value="{{ request.form['paragraphe'] }}"></textarea>
+                <td><textarea rows="4" cols="50" name="paragraphe"
+                              value="{{ request.form['paragraphe   '] }}"></textarea>
                 </td>
             </tr>
 

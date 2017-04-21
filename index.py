@@ -4,8 +4,10 @@ from flask import redirect
 from flask import request
 from db import Database
 from flask import g
+from flask import jsonify
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_url_path="", static_folder="static")
 
 
 def get_db():
@@ -112,9 +114,73 @@ def formulaire():
         return redirect('/admin')
 
 
+@app.route('/identifiant/<iden>', methods=['POST'])
+def identifiant(iden):
+
+    if not get_db().valid_id(iden):
+        return render_template('identifiant.html',
+                               id2_erreur='ID Non Valide')
+
+    if not get_db().is_unique_id(iden):
+        return render_template('identifiant.html',
+                               id_erreur='ID existe deja')
+
+    else:
+        return iden
+
+
+@app.route('/identifiant/', methods=['POST'])
+def erreur_id():
+
+    return render_template('identifiant.html', id2_erreur='ID Non Valide')
+
+
+@app.route('/api/articles/', methods=["GET", "POST"])
+def liste_article():
+    if request.method == "GET":
+        articles = get_db().get_articles_json()
+        data = [{"titre": each[0], "auteur": each[2],
+                 "url":  "/article/" + each[1]} for each in articles]
+        return jsonify(data)
+    else:
+        data = request.get_json()
+        if get_db().is_unique_id(data["identifiant"]) \
+                and get_db().valid_id(data["identifiant"]):
+            get_db().insert_article(data["titre"], data["identifiant"],
+                                    data["auteur"],
+                                    data["date de publication"],
+                                    data["paragraphe"])
+            return "", 201
+        else:
+            return"", 400
+
+
+@app.route('/api/articles/<identifier>')
+def article(identifier):
+    article = get_db().get_article_id_json(identifier)
+    if article is None:
+        return render_template('erreur.html',
+                               erreur='Article Introuvable'), 404
+    else:
+        data = {"titre": article[0], "identifiant": article[1],
+                "auteur": article[2], "date de publication": article[3],
+                "paragraphe": article[4]}
+        return jsonify(data)
+
+
 @app.route('/<other>')
 def page_404(other):
     return render_template('404.html'), 404
+
+
+@app.route('/api/<other>')
+def page_404_api(other):
+    return render_template('404.html'), 404
+
+
+@app.route('/api/doc')
+def doc():
+    return render_template('doc.html')
 
 
 if __name__ == "__main__":

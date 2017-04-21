@@ -9,7 +9,6 @@ def build_artist_dictionary(row):
 
 
 class Database:
-
     def __init__(self):
         self.connection = None
 
@@ -57,7 +56,7 @@ class Database:
         cursor = self.get_connection().cursor()
         cursor.execute("select * from article "
                        "WHERE titre LIKE ? OR paragraphe LIKE ?",
-                       ('%'+cherche+'%', '%'+cherche+'%',))
+                       ('%' + cherche + '%', '%' + cherche + '%',))
         articles = cursor.fetchall()
         liste = []
 
@@ -122,3 +121,25 @@ class Database:
             "paragraphe from article").fetchall()
         return [build_artist_dictionary(each) for each in articles]
 
+    def get_articles_json(self):
+        cursor = self.get_connection().cursor()
+        cursor.execute("select titre, identifiant, auteur "
+                       "from article WHERE date_publication <= date()")
+        articles = cursor.fetchall()
+        if articles is None:
+            return None
+        else:
+            return [(article[0], article[1], article[2])
+                    for article in articles]
+
+    def get_article_id_json(self, identifier):
+        cursor = self.get_connection().cursor()
+        article = cursor.execute(
+            "select titre, identifiant, auteur, date_publication, "
+            "paragraphe "
+            "from article where identifiant = ?",
+            (identifier,)).fetchone()
+        if article is None:
+            return None
+        else:
+            return article
