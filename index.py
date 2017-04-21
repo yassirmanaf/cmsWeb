@@ -41,10 +41,6 @@ def index():
     return render_template('Accueil.html', articles=articles)
 
 app.secret_key = "(*&*&322387heqe738220)(*(*22347657" 
-#@app.route('/admin')
-#def admin():
-#    articles = get_db().get_articles()
-#    return render_template('admin.html', articles=articles)
 @app.route('/administration')
 def start_page():
     articles = get_db().get_articles()
