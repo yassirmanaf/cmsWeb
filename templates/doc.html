@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <title>Documentation API CMS simple</title>
+</head>
+<body>
+<h1>Documentation API CMS simple</h1>
+<table class="table table-striped">
+        <thead>
+        <tr class="pg-primary bg-fluid">
+            <th class="alert-success">Route</th>
+            <th class="alert-success">Method</th>
+            <th class="alert-success">Param</th>
+            <th class="alert-success">Response (succes)</th>
+            <th class="alert-success">Response (failed)</th>
+
+        </tr>
+        </thead>
+
+
+        <tbody>
+        <tr class="bg-success">
+            <td><a href="/api/articles/">/api/articles/</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>Liste de touts les articles publie (code 200)</td>
+            <td>None</td>
+        <tr>
+        <tr class="bg-success">
+            <td><a href="/api/articles/">/api/articles/</td>
+            <td>POST</td>
+            <td>{
+                    "titre": "Le titre de l'article", <br>
+                    "identifiant" : "l'identifiant ne doit pas contenir des espace et caractere speciaux", <br>
+                    "auteur": "l'auteur de l'article",<br>
+                    "date de publication": "yyyy-mm-dd",<br>
+  	                "paragraphe" : "votre paragraphe"<br>
+                }</td>
+            <td>Ajoute l'article a la base de donne (201)</td>
+            <td>Si l'id est non valide ou existe deja (code 400)</td>
+        <tr>
+        <tr class="bg-success">
+            <td><a href="/api/articles/">/api/articles/idArticle</a></td>
+            <td>GET</td>
+            <td>l'identifiant de l'article</td>
+            <td>Information de l'article demandee (code 200)</td>
+            <td>Si l'Article n'existe pas : Article introuvable (code 404)</td>
+        <tr>
+
+        </tbody>
+    </table>
+</body>
+</html>
